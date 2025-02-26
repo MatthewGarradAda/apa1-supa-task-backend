@@ -1,2 +1,4 @@
 .branches
 .temp
+ignored.txt
+config.ts
