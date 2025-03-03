@@ -24,12 +24,15 @@ export const sendEmail = async (to: string, subject: string, content: string, ht
 
 
 Deno.serve(async (req) => {
-  const { to, subject, content } = await req.json();
+  const { email, id } = await req.json();
 
   try {
-    if (!to || !subject || !content) {
+    if (!email || !id) {
       throw new Error("validation failed")
     }
+    const to = email
+    const subject = "Thank you for your order"
+    const content = `Your order ${id} has been confirmed!`
     await sendEmail(to, subject, content)
 
     return new Response(
