@@ -3,10 +3,9 @@ CREATE OR REPLACE FUNCTION handle_notification()
 RETURNS TRIGGER AS $$
 BEGIN
   -- Call your edge function using http request
-  SELECT net.http_post(
+  PERFORM net.http_post(
     'https://uyfwqpzagnashbxqluqj.supabase.co/functions/v1/email_confirmation',
-    jsonb_build_object('record', row_to_json(NEW)),
-    jsonb_build_object('Content-Type', 'application/json', 'Authorization', 'Bearer ' || current_setting('request.jwt.claim.role'))
+    jsonb_build_object('record', row_to_json(NEW))
   ) AS request_id;
   RETURN NEW;
 END;

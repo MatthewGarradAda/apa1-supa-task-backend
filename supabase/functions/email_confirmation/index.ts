@@ -22,17 +22,20 @@ export const sendEmail = async (to: string, subject: string, content: string, ht
   return info;
 };
 
+// Make sure JWT verification is disabled
 
 Deno.serve(async (req) => {
-  const { email, id } = await req.json();
+  const data = await req.json();
+  console.log("data", JSON.stringify(data))
+  const {email, id, total_amount} = data.record;
 
   try {
-    if (!email || !id) {
+    if (!email || !id || !total_amount) {
       throw new Error("validation failed")
     }
     const to = email
     const subject = "Thank you for your order"
-    const content = `Your order ${id} has been confirmed!`
+    const content = `Your order #${id} has been confirmed!\n\nYour account will be debited £${parseFloat(total_amount).toFixed(2)}`
     await sendEmail(to, subject, content)
 
     return new Response(
